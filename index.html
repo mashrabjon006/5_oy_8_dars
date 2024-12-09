@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Foydalanuvchilar Ro'yxati</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #ccc;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        li:hover {
+            background-color: #f0f0f0;
+        }
+        #emailDisplay {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Foydalanuvchilar Ro'yxati</h1>
+    <ul id="userList"></ul>
+    <p id="emailDisplay"></p>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const userList = document.getElementById('userList');
+            const emailDisplay = document.getElementById('emailDisplay');
+
+            fetch('https://jsonplaceholder.typicode.com/users', {
+                method: 'GET'
+            })
+            .then(response => {
+                if (response.status === 200) {
+                    return response.json();
+                }
+            })
+            .then(data => {
+                if (data.length > 0) {
+                    data.forEach(user => {
+                        const li = document.createElement('li');
+                        li.innerHTML = user.name;
+
+                        li.addEventListener('click', function() {
+                            emailDisplay.innerHTML = `Email: ${user.email}`;
+                            highlightActiveUser(li);
+                        });
+
+                        userList.appendChild(li);
+                    });
+                }
+            })
+            .catch(error => {
+                console.error(error);
+                emailDisplay.innerHTML = 'Foydalanuvchilar ro\'yxatini yuklashda xato.';
+            });
+
+            // function highlightActiveUser(selectedLi) {
+            //     const listItems = userList.getElementsByTagName('li');
+            //     for (let item of listItems) {
+            //         item.classList.remove('active');
+            //     }
+            //     selectedLi.classList.add('active');
+            // }
+        });
+    </script>
+</body>
+</html>
